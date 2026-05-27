@@ -1,478 +1,276 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#16382f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="公考规划">
-    <title>公考本地学习规划</title>
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/app-icon.svg">
-    <link rel="stylesheet" href="styles.css">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('./service-worker.js');
-      });
-    }
-  </script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#166c5a">
+  <title>考公 Brain · 行测错题</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
 </head>
-  <body>
-    <svg class="icon-sprite" aria-hidden="true" focusable="false" style="display:none;position:absolute">
-      <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.1a1.1 1.1 0 0 1-1.1 1.1h-5.1v-6.2H9.2V21H4.1A1.1 1.1 0 0 1 3 19.9z"/></symbol>
-      <symbol id="icon-list" viewBox="0 0 24 24"><path d="M8 6.5h12M8 12h12M8 17.5h12M4 6.5h.01M4 12h.01M4 17.5h.01"/></symbol>
-      <symbol id="icon-book" viewBox="0 0 24 24"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v18H7.5A2.5 2.5 0 0 0 5 22zM5 4.5V22M8 6h8M8 10h7"/></symbol>
-      <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"/></symbol>
-      <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></symbol>
-      <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 21V10m0 0 4 4m-4-4-4 4M4 7V4.5A1.5 1.5 0 0 1 5.5 3h13A1.5 1.5 0 0 1 20 4.5V7"/></symbol>
-      <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-      <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
-      <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m-8 0 1 14h8l1-14"/></symbol>
-      <symbol id="icon-edit" viewBox="0 0 24 24"><path d="M4 20h4.5L19.2 9.3a2.1 2.1 0 0 0 0-3L17.7 4.8a2.1 2.1 0 0 0-3 0L4 15.5zM13.7 5.8l4.5 4.5"/></symbol>
-      <symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.4-4.4M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4z"/></symbol>
-      <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M8 2.5h8A1.5 1.5 0 0 1 17.5 4v16A1.5 1.5 0 0 1 16 21.5H8A1.5 1.5 0 0 1 6.5 20V4A1.5 1.5 0 0 1 8 2.5zM10 18.5h4"/></symbol>
-      <symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M7 3v4M17 3v4M4 8h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5z"/></symbol>
-      <symbol id="icon-database" viewBox="0 0 24 24"><path d="M5 6c0-2 14-2 14 0s-14 2-14 0Zm0 0v6c0 2 14 2 14 0V6M5 12v6c0 2 14 2 14 0v-6"/></symbol>
-    </svg>
-
-    <div class="app-shell">
-      <header class="topbar">
-        <div class="brand">
-          <div class="brand-mark">公</div>
-          <div>
-            <p>本地学习规划</p>
-            <h1>公考学习控制台</h1>
-          </div>
+<body>
+  <div class="app-shell">
+    <main class="view-stack">
+      <section class="view is-active" id="view-home" data-view="home">
+        <div class="view-title">
+          <p class="eyebrow" id="dateLabel"></p>
+          <h1>今日</h1>
         </div>
-        <div class="header-actions">
-          <button class="icon-button" id="installApp" type="button" title="安装到桌面" aria-label="安装到桌面" hidden>
-            <svg><use href="#icon-phone"></use></svg>
+        <div class="metric-grid" id="metricGrid"></div>
+
+        <section class="section-block home-action-section">
+          <div class="section-head">
+            <h2>今日复习</h2>
+            <button class="text-button nav-link-button" id="showDueLibraryBtn" type="button">进入复习 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+          <div class="item-list" id="dueList"></div>
+        </section>
+
+        <section class="section-block home-action-section">
+          <div class="section-head">
+            <h2>今日任务</h2>
+            <button class="text-button create-button" id="addTaskBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建</button>
+          </div>
+          <div class="item-list" id="todayTaskList"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-library" data-view="library">
+        <div class="view-title">
+          <p class="eyebrow">复习资料</p>
+          <h1>错题库</h1>
+        </div>
+        <section class="section-block import-entry">
+          <div class="section-head">
+            <h2>导入错题</h2>
+            <button class="chevron-button" id="openImportSheetBtn" type="button" aria-label="打开导入错题"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          </div>
+          <p class="hint-text">粘贴 Claude 内容、图片识别和草稿导入都收在这里。</p>
+        </section>
+
+        <section class="section-block draft-entry">
+          <button class="draft-entry-button" id="openDraftsBtn" type="button">
+            <span id="draftSummary">待保存草稿</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </button>
-          <button class="icon-button" id="quickExport" type="button" title="下载备份" aria-label="下载备份">
-            <svg><use href="#icon-download"></use></svg>
-          </button>
+        </section>
+
+        <section class="section-block library-stats-section">
+          <div class="section-head compact">
+            <h2>板块统计</h2>
+          </div>
+          <div class="stat-chip-row" id="subjectStats"></div>
+        </section>
+
+        <section class="section-block sticky-filter">
+          <div class="search-row">
+            <input id="searchInput" type="search" placeholder="搜索题目、模块、错因">
+            <select id="subjectFilter"></select>
+          </div>
+          <div class="chip-row" id="subjectChips"></div>
+        </section>
+        <div class="item-list library-list" id="mistakeList"></div>
+      </section>
+
+      <section class="view" id="view-drafts" data-view="drafts">
+        <div class="view-title">
+          <p class="eyebrow">导入确认</p>
+          <h1>待保存草稿</h1>
         </div>
-      </header>
-
-      <main>
-        <section class="view is-active" id="view-dashboard" data-view="dashboard" aria-labelledby="dashboardTitle">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow" id="todayLabel">今日</span>
-              <h2 id="dashboardTitle">今天要推进什么</h2>
-            </div>
-            <button class="text-button compact" type="button" data-jump="plan">
-              <svg><use href="#icon-plus"></use></svg>
-              新任务
-            </button>
+        <section class="section-block">
+          <div class="section-head compact">
+            <button class="text-button nav-link-button" id="backToLibraryBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>返回错题库</button>
+            <button class="text-button" id="saveDraftsBtn" type="button">全部保存</button>
           </div>
-
-          <div class="stats-grid" id="statsGrid"></div>
-
-          <div class="panel">
-            <div class="panel-title">
-              <h3>两科进度</h3>
-              <button class="text-button muted compact" type="button" data-jump="plan">查看全部计划</button>
-            </div>
-            <div class="subject-progress" id="subjectProgress"></div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-title">
-              <h3>今日计划</h3>
-              <button class="text-button muted compact" type="button" id="exportTodayTxt">
-                <svg><use href="#icon-download"></use></svg>
-                下载
-              </button>
-            </div>
-            <div class="list-stack" id="todayTasks"></div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-title">
-              <h3>最近要复习</h3>
-              <button class="text-button muted compact" type="button" data-jump="review">处理复习</button>
-            </div>
-            <div class="list-stack" id="nextReviewsHome"></div>
-          </div>
+          <div class="draft-list" id="draftList"></div>
         </section>
+      </section>
 
-        <section class="view" id="view-plan" data-view="plan" aria-labelledby="planTitle">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow">计划管理</span>
-              <h2 id="planTitle">学习任务</h2>
-            </div>
-          </div>
-
-          <!-- 视图切换：日 / 周 / 月 -->
-          <div class="plan-view-tabs">
-            <button class="plan-tab-btn is-active" type="button" data-view="day">日</button>
-            <button class="plan-tab-btn" type="button" data-view="week">周</button>
-            <button class="plan-tab-btn" type="button" data-view="month">月</button>
-          </div>
-
-          <!-- 日视图：左右箭头 + 日期标题 -->
-          <div class="plan-day-header" id="planDayHeader">
-            <button class="plan-nav-arrow" id="dayPrevBtn" type="button" aria-label="前一天">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <div class="plan-date-display" id="planDateDisplay"></div>
-            <button class="plan-nav-arrow" id="dayNextBtn" type="button" aria-label="后一天">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-
-          <!-- 周视图：可滑动7列 -->
-          <div class="plan-week-view" id="planWeekView" style="display:none">
-            <div class="plan-week-scroll-wrap" id="planWeekScrollWrap">
-              <div class="plan-week-scroll" id="planWeekScroll"></div>
-            </div>
-          </div>
-
-          <!-- 月视图：完整日历 -->
-          <div class="plan-month-view" id="planMonthView" style="display:none">
-            <div class="plan-month-header" id="planMonthHeader">
-              <button class="plan-nav-arrow" id="monthPrevBtn" type="button" aria-label="上一月">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <div class="plan-month-title" id="planMonthTitle"></div>
-              <button class="plan-nav-arrow" id="monthNextBtn" type="button" aria-label="下一月">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </div>
-            <div class="plan-cal-grid" id="planCalGrid"></div>
-            <!-- 月视图展开的任务列表 -->
-            <div class="plan-month-day-list" id="planMonthDayList" style="display:none"></div>
-          </div>
-
-          <!-- 筛选栏（仅日视图显示） -->
-          <div class="filter-row" id="taskFilterRow">
-            <label>
-              科目筛选
-              <select id="taskFilterSubject">
-                <option value="all">全部</option>
-                <option value="xingce">行测</option>
-                <option value="shenlun">申论</option>
-              </select>
-            </label>
-            <label>
-              状态
-              <select id="taskFilterStatus">
-                <option value="open">未完成</option>
-                <option value="all">全部</option>
-                <option value="done">已完成</option>
-              </select>
-            </label>
-          </div>
-
-          <!-- 日视图任务列表 -->
-          <div class="list-stack" id="taskList"></div>
-        </section>
-
-        <section class="view" id="view-knowledge" data-view="knowledge" aria-labelledby="knowledgeTitle">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow">错题整理</span>
-              <h2 id="knowledgeTitle">两科错题库</h2>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h3 class="panel-title">错题卡汇总</h3>
-            <div class="outline-grid" id="outlineGrid"></div>
-          </div>
-
-          <div class="search-box">
-            <svg><use href="#icon-search"></use></svg>
-            <input id="pointSearch" placeholder="搜索错题、模块、标签或笔记">
-          </div>
-          <div class="filter-row">
-            <label>
-              科目筛选
-              <select id="pointFilterSubject">
-                <option value="all">全部</option>
-                <optgroup label="行测">
-                  <option value="言语理解">言语理解</option>
-                  <option value="判断推理">判断推理</option>
-                  <option value="数量关系">数量关系</option>
-                  <option value="资料分析">资料分析</option>
-                  <option value="常识判断">常识判断</option>
-                </optgroup>
-                <option value="申论">申论</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="list-stack" id="pointList"></div>
-        </section>
-
-        <section class="view" id="view-review" data-view="review" aria-labelledby="reviewTitle">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow">复习提醒</span>
-              <h2 id="reviewTitle">到期错题复习</h2>
-            </div>
-          </div>
-          <div class="review-tools">
-            <button class="primary-button" type="button" id="createReviewTasks">
-              <svg><use href="#icon-calendar"></use></svg>
-              生成今日复习任务
-            </button>
-          </div>
-          <p class="muted-text" style="margin-bottom:16px">显示所有在库错题，到期优先。点击错题记录复习结果，系统自动安排下次时间。</p>
-          <div class="list-stack" id="reviewList"></div>
-        </section>
-
-        <section class="view" id="view-data" data-view="data" aria-labelledby="dataTitle">
-          <div class="section-heading">
-            <div>
-              <span class="eyebrow">本地数据</span>
-              <h2 id="dataTitle">下载与备份接口</h2>
-            </div>
-          </div>
-
-          <form class="form-panel" id="settingsForm" autocomplete="off">
-            <label>
-              每日目标分钟
-              <input id="dailyTarget" type="number" min="30" max="900" step="10">
-            </label>
-            <div class="form-actions">
-              <button class="primary-button" type="submit">
-                <svg><use href="#icon-check"></use></svg>
-                保存设置
-              </button>
-            </div>
-          </form>
-
-          <div class="data-actions">
-            <button class="primary-button" type="button" id="exportJson">
-              <svg><use href="#icon-download"></use></svg>
-              下载完整备份
-            </button>
-            <button class="text-button" type="button" id="exportCsv">
-              <svg><use href="#icon-download"></use></svg>
-              下载错题卡表格
-            </button>
-            <button class="text-button" type="button" id="importJson">
-              <svg><use href="#icon-upload"></use></svg>
-              导入备份
-            </button>
-            <input id="importFile" type="file" accept="application/json,.json" hidden>
-          </div>
-
-          <div class="panel">
-            <h3>当前本地数据</h3>
-            <p class="muted-text" id="storageStatus"></p>
-          </div>
-
-          <div class="danger-panel">
-            <h3>重置模板</h3>
-            <p>会清空当前任务和错题卡，再恢复内置公考模板。请先下载完整备份。</p>
-            <button class="danger-button" type="button" id="resetApp">
-              <svg><use href="#icon-refresh"></use></svg>
-              重置为模板
-            </button>
-          </div>
-        </section>
-      </main>
-
-      <nav class="bottom-nav" aria-label="主导航">
-        <button class="nav-item is-active" type="button" data-tab="dashboard">
-          <svg><use href="#icon-home"></use></svg>
-          <span>首页</span>
-        </button>
-        <button class="nav-item" type="button" data-tab="plan">
-          <svg><use href="#icon-list"></use></svg>
-          <span>计划</span>
-        </button>
-        <button class="nav-item" type="button" data-tab="knowledge">
-          <svg><use href="#icon-book"></use></svg>
-          <span>错题卡</span>
-        </button>
-        <button class="nav-item" type="button" data-tab="review">
-          <svg><use href="#icon-refresh"></use></svg>
-          <span>复习</span>
-        </button>
-        <button class="nav-item" type="button" data-tab="data">
-          <svg><use href="#icon-database"></use></svg>
-          <span>数据</span>
-        </button>
-      </nav>
-    </div>
-
-    <!-- 底部详情面板 -->
-    <!-- 添加任务底部面板 -->
-    <div class="form-overlay" id="taskFormOverlay"></div>
-    <div class="form-sheet" id="taskFormSheet">
-      <div class="form-sheet-header">
-        <span class="form-sheet-title" id="taskFormTitle">添加任务</span>
-        <button class="icon-button" id="taskFormClose" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="form-sheet-body">
-        <form id="taskForm" autocomplete="off">
-          <input type="hidden" id="taskId">
-          <label>
-            科目
-            <select id="taskSubject" required>
-              <optgroup label="行测">
-                <option value="言语理解">言语理解</option>
-                <option value="判断推理">判断推理</option>
-                <option value="数量关系">数量关系</option>
-                <option value="资料分析">资料分析</option>
-                <option value="常识判断">常识判断</option>
-              </optgroup>
-              <optgroup label="申论">
-                <option value="申论">申论</option>
-              </optgroup>
-            </select>
-          </label>
-          <label>
-            任务名称
-            <input id="taskTitle" required maxlength="80" placeholder="例如：刷题20道">
-          </label>
-          <div class="form-grid">
-            <label>
-              日期
-              <input id="taskDueDate" type="date" required>
-            </label>
-            <label>
-              预计时间(分钟)
-              <input id="taskMinutes" type="number" min="5" max="600" step="5" value="60">
-            </label>
-          </div>
-          <label>
-            优先级
-            <select id="taskPriority">
-              <option value="high">高</option>
-              <option value="medium" selected>中</option>
-              <option value="low">低</option>
-            </select>
-          </label>
-          <label>
-            备注
-            <textarea id="taskNote" rows="3" maxlength="240" placeholder="资料页码、题号、背诵范围等"></textarea>
-          </label>
-          <div class="form-actions">
-            <button class="primary-button" type="submit">
-              <svg><use href="#icon-check"></use></svg>
-              保存任务
-            </button>
-            <button class="text-button" type="button" id="cancelTaskEdit">清空</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- 添加错题卡底部面板 -->
-    <div class="form-overlay" id="pointFormOverlay"></div>
-    <div class="form-sheet" id="pointFormSheet">
-      <div class="form-sheet-header">
-        <span class="form-sheet-title" id="pointFormTitle">添加错题</span>
-        <button class="icon-button" id="pointFormClose" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="form-sheet-body">
-        <form id="pointForm" autocomplete="off">
-          <input type="hidden" id="pointId">
-          <input type="hidden" id="pointReviewRound" value="0">
-          <input type="hidden" id="pointNextReview" value="">
-          <input type="hidden" id="pointCreatedAt" value="">
-          <label>
-            科目
-            <select id="pointSubject">
-              <optgroup label="行测">
-                <option value="言语理解">言语理解</option>
-                <option value="判断推理">判断推理</option>
-                <option value="数量关系">数量关系</option>
-                <option value="资料分析">资料分析</option>
-                <option value="常识判断">常识判断</option>
-              </optgroup>
-              <optgroup label="申论">
-                <option value="申论">申论</option>
-              </optgroup>
-            </select>
-          </label>
-          <label>
-            模块
-            <input id="pointModule" maxlength="40" placeholder="例如：中心理解题">
-          </label>
-          <label>
-            题目
-            <div class="textarea-resize-wrap">
-              <textarea id="pointTitle" rows="3" maxlength="500" placeholder="输入题目文字，可以是完整题干或核心考点描述"></textarea>
-              <div class="textarea-resize-handle" data-target="pointTitle"><div class="textarea-resize-bar"></div></div>
-            </div>
-          </label>
-          <label>题目图片</label>
-          <div class="image-upload-area" id="imageUploadArea">
-            <label for="pointImageInput" class="image-placeholder" id="imagePlaceholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-              <span>点击上传图片</span>
-            </label>
-            <input type="file" id="pointImageInput" accept="image/*" style="display:none">
-            <img id="pointImagePreview" class="image-preview" style="display:none" alt="题目图片预览">
-            <button type="button" class="image-remove-btn" id="removeImageBtn" style="display:none">✕ 移除图片</button>
-          </div>
-          <label>错因标签（可多选）</label>
-          <div class="tag-checkbox-group" id="errorTagGroup"></div>
-          <label>
-            其他原因
-            <input id="pointExtraTags" maxlength="80" placeholder="">
-          </label>
-          <label>
-            笔记
-            <div class="textarea-resize-wrap">
-              <textarea id="pointNote" rows="3" maxlength="600" placeholder="易错陷阱、真题年份、解题步骤口诀等"></textarea>
-              <div class="textarea-resize-handle" data-target="pointNote"><div class="textarea-resize-bar"></div></div>
-            </div>
-          </label>
-          <label>
-            收录日期
-            <input id="pointCreatedDate" type="date" required>
-          </label>
-          <div id="pointScheduleInfo" class="schedule-info" style="display:none"></div>
-          <div class="form-actions">
-            <button class="primary-button" type="submit">
-              <svg><use href="#icon-check"></use></svg>
-              保存错题卡
-            </button>
-            <button class="text-button" type="button" id="cancelPointEdit">清空</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- 浮动+按钮（两个都放在所有面板之后，确保点击不被遮挡） -->
-    <button class="fab" id="fabAddTask" type="button" aria-label="添加任务">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
-    <button class="fab" id="fabAddPoint" type="button" aria-label="添加错题">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
-
-    <div class="detail-overlay" id="detailOverlay"></div>
-    <div class="detail-sheet" id="detailSheet">
-      <div class="detail-header">
-        <div>
-          <div class="detail-subject" id="detailSubject"></div>
+      <section class="view" id="view-plan" data-view="plan">
+        <div class="view-title">
+          <p class="eyebrow">计划管理</p>
+          <h1>学习任务</h1>
         </div>
-        <button class="icon-button" id="detailClose" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="detail-body" id="detailBody"></div>
-      <div class="detail-footer" id="detailFooter"></div>
-    </div>
+        <section class="section-block">
+          <div class="section-head">
+            <h2>任务日历</h2>
+            <button class="text-button create-button" id="planAddTaskBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建</button>
+          </div>
+          <div class="segmented" id="calendarMode">
+            <button class="is-active" data-mode="day" type="button">日</button>
+            <button data-mode="week" type="button">周</button>
+            <button data-mode="month" type="button">月</button>
+          </div>
+          <div class="calendar-shell" id="calendarShell"></div>
+        </section>
+      </section>
 
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="app.js" defer></script>
-  </body>
+      <section class="view" id="view-review" data-view="review">
+        <div class="view-title">
+          <p class="eyebrow">错题复盘</p>
+          <h1>复习</h1>
+        </div>
+        <section class="section-block">
+          <div class="section-head">
+            <h2>已逾期</h2>
+          </div>
+          <div class="item-list" id="reviewOverdueList"></div>
+        </section>
+        <section class="section-block">
+          <div class="section-head">
+            <h2>今日复习</h2>
+          </div>
+          <div class="item-list" id="reviewTodayList"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-settings" data-view="settings">
+        <div class="view-title">
+          <p class="eyebrow">偏好与数据</p>
+          <h1>设置</h1>
+        </div>
+        <section class="section-block">
+          <h2>目标</h2>
+          <div class="setting-row">
+            <span class="setting-row-label">每日目标</span>
+            <label class="setting-row-value"><input id="dailyTargetInput" type="number" min="20" max="900" step="10"><span class="setting-unit">分钟</span></label>
+          </div>
+          <button class="primary-button settings-update-button" id="saveSettingsBtn" type="button">保存设置</button>
+        </section>
+
+        <details class="section-block settings-detail">
+          <summary>AI 接入</summary>
+          <label class="field-label">
+            API Base URL
+            <input id="apiBaseUrlInput" placeholder="https://api.openai.com/v1">
+          </label>
+          <label class="field-label">
+            模型
+            <input id="apiModelInput" placeholder="gpt-4o-mini">
+          </label>
+          <label class="field-label">
+            API Key
+            <input id="apiKeyInput" type="password" placeholder="留空则不修改">
+          </label>
+          <div class="button-row ai-test-row">
+            <button class="secondary-button" id="testApiBtn" type="button">测试连接</button>
+            <span class="api-test-status" id="apiTestStatus"></span>
+          </div>
+          <p class="hint-text">浏览器直连 API 可能被部分平台拦截；如果失败，先用“整理成草稿”的本地解析。</p>
+        </details>
+
+        <section class="section-block">
+          <h2>备份</h2>
+          <div class="button-row">
+            <button class="secondary-button" id="exportBtn" type="button">导出 JSON</button>
+            <label class="secondary-button file-label">
+              导入 JSON
+              <input id="importFileInput" type="file" accept="application/json,.json">
+            </label>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主导航">
+      <button class="is-active" data-nav="home" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg>
+        今日
+      </button>
+      <button data-nav="plan" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4M17 3v4M4 8h16"/><path d="M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1z"/><path d="M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>
+        计划
+      </button>
+      <button data-nav="library" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 8h7M8 12h7"/></svg>
+        错题
+      </button>
+      <button data-nav="review" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg>
+        复习
+      </button>
+      <button data-nav="settings" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/><path d="M19 12a7 7 0 0 0-.1-1.1l2-1.5-2-3.4-2.4 1a7.5 7.5 0 0 0-1.9-1.1L14.2 3h-4.4l-.4 2.9A7.5 7.5 0 0 0 7.5 7L5.1 6l-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.1l-2 1.5 2 3.4 2.4-1a7.5 7.5 0 0 0 1.9 1.1l.4 2.9h4.4l.4-2.9a7.5 7.5 0 0 0 1.9-1.1l2.4 1 2-3.4-2-1.5c.1-.3.1-.7.1-1.1z"/></svg>
+        设置
+      </button>
+    </nav>
+    <button class="fab-action" id="quickImportBtn" type="button" aria-label="快捷操作">
+      <span>＋</span>
+    </button>
+  </div>
+
+  <div class="sheet-backdrop" id="mistakeSheetBackdrop"></div>
+  <aside class="bottom-sheet" id="mistakeSheet" aria-hidden="true">
+    <div class="sheet-handle"></div>
+    <div class="sheet-body" id="mistakeSheetBody"></div>
+  </aside>
+
+  <div class="sheet-backdrop" id="taskSheetBackdrop"></div>
+  <aside class="bottom-sheet small" id="taskSheet" aria-hidden="true">
+    <div class="sheet-handle"></div>
+    <form class="sheet-form" id="taskForm">
+      <h2 id="taskFormTitle">新建任务</h2>
+      <input id="taskId" type="hidden">
+      <label class="field-label">
+        任务名称
+        <input id="taskTitle" required maxlength="80">
+      </label>
+      <div class="two-col">
+        <label class="field-label">
+          日期
+          <input id="taskDate" type="date" required>
+        </label>
+        <label class="field-label">
+          分钟
+          <input id="taskMinutes" type="number" min="5" max="300" step="5" value="30">
+        </label>
+      </div>
+      <label class="field-label">
+        优先级
+        <select id="taskPriority">
+          <option value="high">高优先</option>
+          <option value="medium" selected>中优先</option>
+          <option value="low">低优先</option>
+        </select>
+      </label>
+      <label class="field-label">
+        备注
+        <textarea id="taskNote" rows="3"></textarea>
+      </label>
+      <div class="button-row">
+        <button class="primary-button" type="submit">保存</button>
+        <button class="secondary-button" id="taskCancelBtn" type="button">取消</button>
+      </div>
+    </form>
+  </aside>
+
+  <div class="sheet-backdrop" id="importSheetBackdrop"></div>
+  <aside class="bottom-sheet small" id="importSheet" aria-hidden="true">
+    <div class="sheet-handle"></div>
+    <section class="import-panel">
+      <div class="section-head">
+        <h2>导入错题</h2>
+        <button class="text-button" id="sampleBtn" type="button">示例</button>
+      </div>
+      <textarea id="claudeInput" rows="8" placeholder="粘贴 Claude 总结出的错题卡"></textarea>
+      <div class="button-row">
+        <button class="primary-button" id="parseBtn" type="button">整理成草稿</button>
+        <button class="secondary-button" id="aiParseBtn" type="button">AI 整理</button>
+      </div>
+      <label class="secondary-button file-label import-file-button">
+        图片 AI 识别
+        <input id="imageAiInput" type="file" accept="image/*" multiple>
+      </label>
+      <label class="secondary-button file-label import-file-button">
+        仅保存图片到草稿
+        <input id="imageAttachInput" type="file" accept="image/*" multiple>
+      </label>
+      <button class="text-button under-button" id="clearImportBtn" type="button">清空内容</button>
+    </section>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
 </html>
