@@ -1,0 +1,35 @@
+{
+  "id": "mistake-sample-001",
+  "title": "A fictional data-analysis question about comparing growth rates",
+  "source": "Sample mock practice set",
+  "subject": "资料分析",
+  "module": "增长率计算",
+  "errorTags": [
+    "公式记错",
+    "没看清题干"
+  ],
+  "formula": "Growth rate = growth amount / base amount.",
+  "summary": "Confirm the base period before comparing growth rates. Compare rate changes only after identifying the correct denominator.",
+  "correctAnswer": "B",
+  "wrongPath": "Compared absolute growth amounts instead of percentage-point changes.",
+  "trap": "The wording asks for rate comparison, not amount comparison.",
+  "myAnswer": "C",
+  "images": [
+    {
+      "id": "img-placeholder-001",
+      "name": "placeholder-only.png",
+      "type": "image/png",
+      "dataUrl": "data:image/png;base64,PLACEHOLDER_ONLY",
+      "createdAt": "2026-06-01T00:00:00.000Z"
+    }
+  ],
+  "raw": "Fictional sample content for documentation only.",
+  "nature": "thinking",
+  "status": "new",
+  "reviewRound": 0,
+  "reviewCount": 0,
+  "nextReview": "2026-06-01",
+  "createdAt": "2026-06-01T00:00:00.000Z",
+  "updatedAt": "2026-06-01T00:00:00.000Z"
+}
+

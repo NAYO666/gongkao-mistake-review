@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/mistake.schema.json",
+  "title": "Gongkao Mistake Review Card",
+  "description": "Schema for a single mistake card based on the current app data shape.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "title",
+    "subject",
+    "status",
+    "reviewRound",
+    "reviewCount",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Question stem, short title, or mistake description."
+    },
+    "source": {
+      "type": "string",
+      "description": "User-provided source note. Avoid copyrighted full exam content in public examples."
+    },
+    "subject": {
+      "type": "string",
+      "enum": [
+        "言语理解",
+        "判断推理",
+        "数量关系",
+        "资料分析",
+        "常识判断",
+        "申论"
+      ]
+    },
+    "module": {
+      "type": "string"
+    },
+    "errorTags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "formula": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "correctAnswer": {
+      "type": "string"
+    },
+    "wrongPath": {
+      "type": "string"
+    },
+    "trap": {
+      "type": "string"
+    },
+    "myAnswer": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array",
+      "description": "Experimental image attachments stored as browser data URLs.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "dataUrl": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "raw": {
+      "type": "string",
+      "description": "Original imported or pasted content, if available."
+    },
+    "nature": {
+      "type": "string",
+      "enum": [
+        "blind",
+        "thinking",
+        "careless"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "learning",
+        "mastered"
+      ]
+    },
+    "reviewRound": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reviewCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "nextReview": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "lastReviewed": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+

@@ -1,0 +1,57 @@
+{
+  "app": "gk-brain-xingce-pwa",
+  "version": 1,
+  "exportedAt": "2026-06-01T00:00:00.000Z",
+  "data": {
+    "mistakes": [
+      {
+        "id": "mistake-sample-001",
+        "title": "A fictional data-analysis question about comparing growth rates",
+        "source": "Sample mock practice set",
+        "subject": "资料分析",
+        "module": "增长率计算",
+        "errorTags": [
+          "公式记错",
+          "没看清题干"
+        ],
+        "formula": "Growth rate = growth amount / base amount.",
+        "summary": "Confirm the base period before comparing growth rates.",
+        "correctAnswer": "B",
+        "wrongPath": "Compared absolute growth amounts instead of percentage-point changes.",
+        "trap": "The wording asks for rate comparison, not amount comparison.",
+        "myAnswer": "C",
+        "images": [],
+        "raw": "Fictional sample content for documentation only.",
+        "nature": "thinking",
+        "status": "new",
+        "reviewRound": 0,
+        "reviewCount": 0,
+        "nextReview": "2026-06-01",
+        "createdAt": "2026-06-01T00:00:00.000Z",
+        "updatedAt": "2026-06-01T00:00:00.000Z"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "task-sample-001",
+        "title": "Review data-analysis mistakes",
+        "subject": "资料分析",
+        "date": "2026-06-01",
+        "minutes": 30,
+        "priority": "medium",
+        "note": "Sample task only.",
+        "done": false,
+        "createdAt": "2026-06-01T00:00:00.000Z"
+      }
+    ],
+    "settings": {
+      "dailyTarget": 240,
+      "apiBaseUrl": "https://api.example.com/v1",
+      "apiModel": "example-model",
+      "apiKey": ""
+    },
+    "createdAt": "2026-06-01T00:00:00.000Z",
+    "updatedAt": "2026-06-01T00:00:00.000Z"
+  }
+}
+
