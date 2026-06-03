@@ -35,11 +35,13 @@
     data: loadData(),
     view: "home",
     drafts: [],
+    managementMode: false,
     subjectFilter: "全部",
     search: "",
     calendarMode: "day",
     selectedDate: todayStr()
   };
+  var selectedMistakes = new Set();
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -600,7 +602,7 @@
   function renderTopAction() {
     var btn = $("quickImportBtn");
     if (!btn) return;
-    var visible = state.view === "plan" || state.view === "library";
+    var visible = (state.view === "plan" || state.view === "library") && !state.managementMode;
     btn.style.visibility = visible ? "visible" : "hidden";
     btn.setAttribute("aria-hidden", visible ? "false" : "true");
     btn.title = state.view === "plan" ? "新建计划" : "新建错题";
@@ -669,6 +671,7 @@
     var days = daysUntil(m.nextReview);
     var statusClass = days < 0 ? "overdue" : days === 0 ? "due" : "";
     var statusText = m.status === "mastered" ? "已掌握" : days < 0 ? "逾期" + Math.abs(days) + "天" : days === 0 ? "今天复习" : days + "天后";
+    var tagItems = renderMistakeTagItems(m);
     var feedbackHtml = options.feedback === false ? "" : [
       '<div class="feedback-row">',
       '<button data-review="' + m.id + '" data-result="wrong" type="button">不会</button>',
@@ -677,19 +680,18 @@
       '</div>'
     ].join("");
     return [
-      '<article class="mistake-card" data-mistake-id="' + m.id + '" style="--i:' + Number(index || 0) + '">',
-      '<div class="card-top"><h3>' + escapeHtml(m.title) + '</h3><span class="status-pill ' + statusClass + '">' + statusText + '</span></div>',
-      '<div class="mistake-source-row">' + (m.source ? '<span>' + escapeHtml(m.source) + '</span>' : '<span>未填写来源</span>') + '</div>',
-      '<div class="mistake-reason-row">' + (m.errorTags && m.errorTags.length ? m.errorTags.map(function (t) { return '<span>' + escapeHtml(t) + '</span>'; }).join("") : '<span>未填写错因</span>') + '</div>',
+      '<article class="mistake-card review-mistake-card" data-mistake-id="' + m.id + '" style="--i:' + Number(index || 0) + '">',
+      '<div class="library-card-content">',
+      '<span class="review-badge ' + statusClass + '">' + escapeHtml(statusText) + '</span>',
+      '<h3 class="library-question-text">' + escapeHtml(m.title) + '</h3>',
+      '<div class="tags-container">' + tagItems.join("") + '</div>',
+      '</div>',
       feedbackHtml,
       "</article>"
     ].join("");
   }
 
-  function renderLibraryMistakeCard(m, index) {
-    var days = daysUntil(m.nextReview);
-    var statusClass = days < 0 ? "overdue" : days === 0 ? "due" : "";
-    var statusText = m.status === "mastered" ? "已掌握" : days < 0 ? "逾期" + Math.abs(days) + "天" : days === 0 ? "今天复习" : days + "天后";
+  function renderMistakeTagItems(m) {
     var tagItems = [];
     tagItems.push('<span class="tag-pill source-tag">' + escapeHtml(m.source || "未填写来源") + '</span>');
     if (m.errorTags && m.errorTags.length) {
@@ -699,11 +701,23 @@
     } else {
       tagItems.push('<span class="tag-pill">未填写错因</span>');
     }
+    return tagItems;
+  }
+
+  function renderLibraryMistakeCard(m, index) {
+    var days = daysUntil(m.nextReview);
+    var statusClass = days < 0 ? "overdue" : days === 0 ? "due" : "";
+    var statusText = m.status === "mastered" ? "已掌握" : days < 0 ? "逾期" + Math.abs(days) + "天" : days === 0 ? "今天复习" : days + "天后";
+    var isSelected = selectedMistakes.has(m.id);
+    var tagItems = renderMistakeTagItems(m);
     return [
-      '<article class="mistake-card library-mistake-card" data-mistake-id="' + m.id + '" style="--i:' + Number(index || 0) + '">',
+      '<article class="mistake-card library-mistake-card ' + (isSelected ? "selected" : "") + '" data-mistake-id="' + m.id + '" style="--i:' + Number(index || 0) + '">',
+      '<span class="mistake-select-control" aria-hidden="true"></span>',
+      '<div class="library-card-content">',
       '<span class="review-badge ' + statusClass + '">' + escapeHtml(statusText) + '</span>',
       '<h3 class="library-question-text">' + escapeHtml(m.title) + '</h3>',
       '<div class="tags-container">' + tagItems.join("") + '</div>',
+      '</div>',
       "</article>"
     ].join("");
   }
@@ -802,7 +816,78 @@
       var text = [m.title, m.source, m.subject, m.module, m.formula, m.summary, m.errorTags.join(" "), m.raw].join(" ").toLowerCase();
       return subjectOk && (!query || text.indexOf(query) >= 0);
     });
+    if (state.managementMode) {
+      var visibleIds = new Set(list.map(function (m) { return m.id; }));
+      Array.from(selectedMistakes).forEach(function (mistakeId) {
+        if (!visibleIds.has(mistakeId)) selectedMistakes.delete(mistakeId);
+      });
+    }
     $("mistakeList").innerHTML = list.length ? list.map(renderLibraryMistakeCard).join("") : empty("没有匹配的错题");
+    updateManagementUI();
+  }
+
+  function setManagementMode(enabled) {
+    state.managementMode = Boolean(enabled);
+    if (!state.managementMode) selectedMistakes.clear();
+    document.body.classList.toggle("management-mode", state.managementMode);
+    updateManagementUI();
+    renderTopAction();
+    renderLibrary();
+  }
+
+  function updateManagementUI() {
+    document.body.classList.toggle("management-mode", state.managementMode);
+    var manageBtn = $("btn-manage-mistakes");
+    if (manageBtn) manageBtn.textContent = state.managementMode ? "取消" : "管理";
+    var actionBar = $("bulkMistakeActionBar");
+    if (actionBar) actionBar.setAttribute("aria-hidden", state.managementMode ? "false" : "true");
+    var count = selectedMistakes.size;
+    var countEl = $("bulkSelectedCount");
+    if (countEl) countEl.textContent = "已选择 " + count + " 条";
+    var deleteBtn = $("bulkDeleteBtn");
+    if (deleteBtn) {
+      deleteBtn.disabled = count === 0;
+      deleteBtn.setAttribute("aria-disabled", count === 0 ? "true" : "false");
+    }
+    Array.from(document.querySelectorAll("#mistakeList [data-mistake-id]")).forEach(function (card) {
+      card.classList.toggle("selected", selectedMistakes.has(card.dataset.mistakeId));
+    });
+  }
+
+  function toggleMistakeSelection(mistakeId) {
+    if (!mistakeId) return;
+    if (selectedMistakes.has(mistakeId)) selectedMistakes.delete(mistakeId);
+    else selectedMistakes.add(mistakeId);
+    updateManagementUI();
+  }
+
+  function selectCurrentMistakes() {
+    if (!state.managementMode) return;
+    selectedMistakes.clear();
+    Array.from(document.querySelectorAll("#mistakeList [data-mistake-id]")).forEach(function (card) {
+      if (card.dataset.mistakeId) selectedMistakes.add(card.dataset.mistakeId);
+    });
+    updateManagementUI();
+  }
+
+  function deleteSelectedMistakes() {
+    if (!state.managementMode) return;
+    var count = selectedMistakes.size;
+    if (!count) return;
+    if (!confirm("确认删除选中的 " + count + " 条错题？此操作不可恢复。")) return;
+    var oldMistakes = state.data.mistakes;
+    state.data.mistakes = state.data.mistakes.filter(function (m) {
+      return !selectedMistakes.has(m.id);
+    });
+    if (!saveData()) {
+      state.data.mistakes = oldMistakes;
+      return;
+    }
+    selectedMistakes.clear();
+    state.managementMode = false;
+    document.body.classList.remove("management-mode");
+    render();
+    showToast("已删除 " + count + " 条错题");
   }
 
   function renderSubjectStats() {
@@ -1029,6 +1114,11 @@
   }
 
   function switchView(view) {
+    if (view !== "library" && state.managementMode) {
+      state.managementMode = false;
+      selectedMistakes.clear();
+      document.body.classList.remove("management-mode");
+    }
     state.view = view;
     Array.from(document.querySelectorAll(".view")).forEach(function (el) {
       var active = el.dataset.view === view;
@@ -1050,6 +1140,7 @@
     Array.from(document.querySelectorAll("[data-nav]")).forEach(function (btn) {
       btn.classList.toggle("is-active", btn.dataset.nav === view);
     });
+    updateManagementUI();
     renderTopAction();
   }
 
@@ -1236,6 +1327,21 @@
       var nav = target.closest("[data-nav]");
       if (nav) switchView(nav.dataset.nav);
 
+      if (target.closest("#btn-manage-mistakes")) {
+        setManagementMode(!state.managementMode);
+        return;
+      }
+
+      if (target.closest("#bulkSelectCurrentBtn")) {
+        selectCurrentMistakes();
+        return;
+      }
+
+      if (target.closest("#bulkDeleteBtn")) {
+        deleteSelectedMistakes();
+        return;
+      }
+
       if (target.closest("[data-home-review-entry]")) {
         switchView("review");
         renderReview();
@@ -1262,6 +1368,10 @@
 
       var card = target.closest("[data-mistake-id]");
       if (card && !target.closest("[data-review]")) {
+        if (state.managementMode && card.classList.contains("library-mistake-card")) {
+          toggleMistakeSelection(card.dataset.mistakeId);
+          return;
+        }
         var mistake = state.data.mistakes.find(function (m) { return m.id === card.dataset.mistakeId; });
         if (mistake) openMistakeSheet(mistake);
       }

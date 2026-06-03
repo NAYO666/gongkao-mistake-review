@@ -37,8 +37,11 @@
 
       <section class="view" id="view-library" data-view="library">
         <div class="view-title">
-          <p class="eyebrow">复习资料</p>
-          <h1>错题库</h1>
+          <div>
+            <p class="eyebrow">复习资料</p>
+            <h1>错题库</h1>
+          </div>
+          <span class="manage-mistakes-button" id="btn-manage-mistakes">管理</span>
         </div>
         <section class="section-block import-entry">
           <div class="section-head">
@@ -197,6 +200,12 @@
     <button class="fab-action" id="quickImportBtn" type="button" aria-label="快捷操作">
       <span>＋</span>
     </button>
+  </div>
+
+  <div class="bulk-action-bar" id="bulkMistakeActionBar" aria-hidden="true">
+    <span id="bulkSelectedCount">已选择 0 条</span>
+    <button class="bulk-text-button" id="bulkSelectCurrentBtn" type="button">全选当前</button>
+    <button class="bulk-delete-button" id="bulkDeleteBtn" type="button" disabled>删除</button>
   </div>
 
   <div class="sheet-backdrop" id="mistakeSheetBackdrop"></div>
