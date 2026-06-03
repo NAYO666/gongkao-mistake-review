@@ -686,6 +686,28 @@
     ].join("");
   }
 
+  function renderLibraryMistakeCard(m, index) {
+    var days = daysUntil(m.nextReview);
+    var statusClass = days < 0 ? "overdue" : days === 0 ? "due" : "";
+    var statusText = m.status === "mastered" ? "已掌握" : days < 0 ? "逾期" + Math.abs(days) + "天" : days === 0 ? "今天复习" : days + "天后";
+    var tagItems = [];
+    tagItems.push('<span class="tag-pill source-tag">' + escapeHtml(m.source || "未填写来源") + '</span>');
+    if (m.errorTags && m.errorTags.length) {
+      tagItems = tagItems.concat(m.errorTags.map(function (tag) {
+        return '<span class="tag-pill">' + escapeHtml(tag) + '</span>';
+      }));
+    } else {
+      tagItems.push('<span class="tag-pill">未填写错因</span>');
+    }
+    return [
+      '<article class="mistake-card library-mistake-card" data-mistake-id="' + m.id + '" style="--i:' + Number(index || 0) + '">',
+      '<span class="review-badge ' + statusClass + '">' + escapeHtml(statusText) + '</span>',
+      '<h3 class="library-question-text">' + escapeHtml(m.title) + '</h3>',
+      '<div class="tags-container">' + tagItems.join("") + '</div>',
+      "</article>"
+    ].join("");
+  }
+
   function renderTaskCard(t, index) {
     return [
       '<article class="task-card ' + (t.done ? "is-done" : "") + '" data-task-id="' + t.id + '" style="--i:' + Number(index || 0) + '">',
@@ -780,7 +802,7 @@
       var text = [m.title, m.source, m.subject, m.module, m.formula, m.summary, m.errorTags.join(" "), m.raw].join(" ").toLowerCase();
       return subjectOk && (!query || text.indexOf(query) >= 0);
     });
-    $("mistakeList").innerHTML = list.length ? list.map(function (m, index) { return renderMistakeCard(m, index, { feedback: false }); }).join("") : empty("没有匹配的错题");
+    $("mistakeList").innerHTML = list.length ? list.map(renderLibraryMistakeCard).join("") : empty("没有匹配的错题");
   }
 
   function renderSubjectStats() {

@@ -721,7 +721,13 @@ button:active {
   overflow-y: hidden;
   padding: 0 1px 2px;
   overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+}
+
+#view-library .chip-row::-webkit-scrollbar {
+  display: none;
 }
 
 #view-library .chip-row button {
@@ -749,52 +755,88 @@ button:active {
 }
 
 #view-library .mistake-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 12px 16px;
   overflow: hidden;
   border: 0;
   box-shadow: var(--soft-shadow);
 }
 
-#view-library .card-top,
-#view-library .mistake-source-row,
-#view-library .mistake-reason-row {
+#view-library .library-question-text,
+#view-library .tags-container {
   min-width: 0;
   max-width: 100%;
 }
 
-#view-library .card-top h3 {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#view-library #mistakeList .mistake-card .card-top h3 {
+#view-library .library-question-text {
   display: -webkit-box;
+  margin: 0;
+  padding-right: 72px;
+  overflow: hidden;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  max-height: 2.8em;
-  overflow: hidden;
-  margin: 0;
-  line-height: 1.4;
+  color: var(--text-main);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
   white-space: normal;
 }
 
-#view-library .status-pill,
-#view-library .mistake-source-row span,
-#view-library .mistake-reason-row span {
+#view-library .review-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  max-width: calc(100% - 24px);
+  padding: 2px 6px;
   border: 0;
-  background: rgba(248, 250, 252, 0.86);
+  border-radius: 999px;
+  background: rgba(55, 65, 81, 0.06);
   color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: nowrap;
 }
 
-#view-library .status-pill.due {
-  background: rgba(199, 154, 81, 0.10);
+#view-library .review-badge.due {
+  background: rgba(199, 154, 81, 0.12);
   color: var(--status-warn);
 }
 
-#view-library .status-pill.overdue {
-  background: rgba(189, 107, 115, 0.10);
+#view-library .review-badge.overdue {
+  background: rgba(189, 107, 115, 0.12);
   color: var(--status-bad);
+}
+
+#view-library .tags-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin-top: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#view-library .tags-container::-webkit-scrollbar {
+  display: none;
+}
+
+#view-library .tag-pill {
+  flex: 0 0 auto;
+  max-width: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-app);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.5;
+  white-space: nowrap;
 }
 
 #view-library .empty-state {
